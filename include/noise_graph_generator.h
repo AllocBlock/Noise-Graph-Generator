@@ -39,7 +39,7 @@ public:
         srand(seed);
     }
 
-    char randByte() {
+    byte randByte() {
         return (byte)(rand() % 255);
     }
 
@@ -62,6 +62,7 @@ public:
         this->w = w;
         this->h = h;
         data = new byte[w * h];
+        memset(data, 0, sizeof(byte) * w * h);
     }
 
     int width() {
@@ -72,7 +73,7 @@ public:
         return h;
     }
 
-    char pixel(int x, int y) {
+    byte pixel(int x, int y) {
         // 从左上到右下，从0开始数
         if (x < 0 || x >= w || y < 0 || y >= h) {
             throw("Image - getPixel - index out of range");
@@ -89,19 +90,51 @@ public:
         data[index] = val;
     }
 
-    void fill(int x, int y, int width, int height, char val) {
+    void fill(int x, int y, int width, int height, byte val) {
         if (x < 0 || x + width >  w || y < 0 || y + height > h) {
             throw("Image - fill - index out of range");
         }
 
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                int index = i * w + j + y * w + x;
-                data[index] = val;
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
+                int index = j * w + i + y * w + x;
+                pixel(i, j, val);
             }
         }
     }
 
+    void add(GrayImage v) {
+        if (w != v.w || h != v.h) {
+            throw("GrayImage - add - width or height doesn't match");
+        }
+        for (int j = 0; j < h; j++) {
+            for (int i = 0; i < w; i++) {
+                int newVal = min(((int)pixel(i, j) + (int)v.pixel(i, j)), 255);
+                byte res = (byte)(newVal & 0x000000ff);
+                pixel(i, j, res);
+            }
+        }
+    }
+
+    void add(byte v) {
+        for (int j = 0; j < h; j++) {
+            for (int i = 0; i < w; i++) {
+                int newVal = min(((int)pixel(i, j) + (int)v), 255);
+                byte res = (byte)(newVal & 0x000000ff);
+                pixel(i, j, res);
+            }
+        }
+    }
+
+    void mul(float v) {
+        for (int j = 0; j < h; j++) {
+            for (int i = 0; i < w; i++) {
+                int newVal = min((int)(pixel(i, j) * v), 255);
+                byte res = (byte)(newVal & 0x000000ff);
+                pixel(i, j, res);
+            }
+        }
+    }
 };
 
 class vec2 {

@@ -26,5 +26,8 @@
     <ClInclude Include="include\noise_graph_generator.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\random.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

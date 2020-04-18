@@ -4,7 +4,7 @@
 
 * Create At: 2020-04-16
 
-* Update At: 2020-04-16
+* Update At: 2020-04-18
 
 * Description: Generate random number
 
@@ -24,6 +24,11 @@ public:
 
     Random(int seed) {
         this->seed = seed;
+        srand(seed);
+    }
+
+    void setSeed(int newSeed) {
+        seed = newSeed;
         srand(seed);
     }
 

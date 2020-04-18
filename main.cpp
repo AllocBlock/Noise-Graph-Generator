@@ -10,7 +10,6 @@ void runTests() {
     int seed = (int)time(0);
 
     width = height = 512;
-
     
     // 白噪声，1x1
     cout << "生成 1x1 白噪声(White Noise) 图像...";
@@ -60,7 +59,7 @@ void runTests() {
     }
     savePPMP2(*img, "fabric_value_noise.ppm");
     cout << "\r生成 分形+值噪声 图像完成" << endl;
-
+    
     // 柏林噪声，分形
     cout << "生成 分形+柏林噪声 图像...";
     img = new GrayImage(width, height);
@@ -78,9 +77,14 @@ void runTests() {
     }
     savePPMP2(*img, "fabric_perlin_noise.ppm");
     cout << "\r生成 分形+柏林噪声 图像完成" << endl;
+    
+
+    cout << "生成 16x16 单形噪声(Simplex Noise) 图像...";
+    img = &simplexNoise(width, height, 16, seed);
+    savePPMP2(*img, "simplex_noise_16x16.ppm");
+    cout << "\r生成 16x16 单形噪声(Simplex Noise) 图像完成" << endl;
 }
 
-int main()
-{
+int main() {
     runTests();
 }

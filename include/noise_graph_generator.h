@@ -4,7 +4,7 @@
 
 * Create At: 2020-04-14
 
-* Update At: 2020-04-16
+* Update At: 2020-04-18
 
 * Description: Provide noise graph generate functions
 
@@ -21,37 +21,6 @@
 using namespace std;
 /* debug end */
 
-
-
-//class Random {
-//private:
-//    int seed;
-//
-//public:
-//    Random() {
-//        seed = (int)time(0);
-//        srand(seed);
-//    }
-//
-//    Random(int seed) {
-//        this->seed = seed;
-//        srand(seed);
-//    }
-//
-//    byte randByte() {
-//        return (byte)(rand() % 255);
-//    }
-//
-//    float randFloat() {
-//        return (float)rand() / RAND_MAX;
-//    }
-//
-//    int randInt(int range) {
-//        return rand() % range;
-//    }
-//};
-
-
 class vec2 {
 public:
     float x, y;
@@ -63,8 +32,17 @@ public:
         this->y = y;
     }
 
+    float len() {
+        return sqrt(x * x + y * y);
+    }
+
     static float dot(vec2 a, vec2 b) {
         return a.x * b.x + a.y * b.y;
+    }
+
+    static vec2 normalize(vec2 v) {
+        float length = v.len();
+        return v / length;
     }
 
     vec2 operator/(float val) {
@@ -81,6 +59,8 @@ public:
 
 };
 
+
+byte intToByte(int v);
 
 class GrayImage {
 private:
@@ -139,7 +119,7 @@ public:
         for (int j = 0; j < h; j++) {
             for (int i = 0; i < w; i++) {
                 int newVal = min(((int)pixel(i, j) + (int)v.pixel(i, j)), 255);
-                byte res = (byte)(newVal & 0x000000ff);
+                byte res = intToByte(newVal);
                 pixel(i, j, res);
             }
         }
@@ -149,7 +129,20 @@ public:
         for (int j = 0; j < h; j++) {
             for (int i = 0; i < w; i++) {
                 int newVal = min(((int)pixel(i, j) + (int)v), 255);
-                byte res = (byte)(newVal & 0x000000ff);
+                byte res = intToByte(newVal);
+                pixel(i, j, res);
+            }
+        }
+    }
+
+    void mul(GrayImage v) {
+        if (w != v.w || h != v.h) {
+            throw("GrayImage - add - width or height doesn't match");
+        }
+        for (int j = 0; j < h; j++) {
+            for (int i = 0; i < w; i++) {
+                int newVal = min((int)(pixel(i, j) * (int)v.pixel(i, j)), 255);
+                byte res = intToByte(newVal);
                 pixel(i, j, res);
             }
         }
@@ -159,7 +152,7 @@ public:
         for (int j = 0; j < h; j++) {
             for (int i = 0; i < w; i++) {
                 int newVal = min((int)(pixel(i, j) * v), 255);
-                byte res = (byte)(newVal & 0x000000ff);
+                byte res = intToByte(newVal);
                 pixel(i, j, res);
             }
         }
@@ -170,12 +163,13 @@ public:
             for (int i = 0; i < w; i++) {
                 int level = (int)((float)pixel(i, j) / 255 * unit);
                 int newVal = ((float)level / unit) * 255;
-                byte res = (byte)(newVal & 0x000000ff);
+                byte res = intToByte(newVal);
                 pixel(i, j, res);
             }
         }
     }
 };
+
 
 
 /*

@@ -298,3 +298,55 @@ GrayImage simplexNoise(int width, int height, int cellSize, int seed){
     return img;
     
 }
+
+GrayImage worleyNoise(int width, int height, int cellSize, int seed) {
+    // 注意：simplex方法是在常用的版本下根据自己的理解修改的，可能存在错误！
+    // Warning: this method is modified based on a general version. I implement this under my understanding, so it may have some errors in it
+    GrayImage img(width, height);
+    Random random(seed);
+
+    // 特征点
+    int rowPointCount = width / cellSize + 2; // +1，为了边缘部分的处理
+    int colPointCount = height / cellSize + 2;
+
+
+    int pointCount = rowPointCount * colPointCount;
+    vec2* points = new vec2[pointCount];
+    for (int i = 0; i < pointCount; i++) {
+        points[i] = { random.randFloat(), random.randFloat() };
+    }
+
+
+    // 遍历像素
+    for (int j = 0; j < height; j++) {
+        for (int i = 0; i < width; i++) {
+            // 确定在哪个网格
+            int cellX = i / cellSize, cellY = j / cellSize;
+            // 获取九个特征点
+            vec2 nearbyPoints[9];
+            for (int n = 0; n < 3; n++) {
+                for (int m = 0; m < 3; m++) {
+                    vec2 shift((float)(m - 1), (float)(n - 1)); // 位置的偏移量
+                    nearbyPoints[n * 3 + m] = points[(cellY + n) * rowPointCount + (cellX + m)] + shift;
+                }
+            }
+            // 计算最短距离
+            float minDistance = 2000;
+            vec2 target = { (float)(i % cellSize) / cellSize , (float)(j % cellSize) / cellSize };
+            for (int n = 0; n < 9; n++) {
+                minDistance = min(minDistance, vec2::distance(nearbyPoints[n], target));
+                
+            }
+            byte res = intToByte(min((int)(minDistance * 255), 255));
+            if (res < 20 && img.pixel(max(0, i - 3), j) > 150) {
+                cout << "??";
+            }
+            img.pixel(i, j, res);
+
+        }
+    }
+
+    delete[]points;
+    return img;
+
+}

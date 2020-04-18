@@ -83,6 +83,12 @@ void runTests() {
     img = &simplexNoise(width, height, 16, seed);
     savePPMP2(*img, "simplex_noise_16x16.ppm");
     cout << "\r生成 16x16 单形噪声(Simplex Noise) 图像完成" << endl;
+    
+    cout << "生成 16x16 沃利噪声(Worley Noise) 图像...";
+    img = &worleyNoise(width, height, 16, seed);
+    savePPMP2(*img, "worley_noise_16x16.ppm");
+    cout << "\r生成 16x16 沃利噪声(Worley Noise) 图像完成" << endl;
+    
 }
 
 int main() {

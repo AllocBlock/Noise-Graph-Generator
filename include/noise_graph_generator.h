@@ -36,6 +36,10 @@ public:
         return sqrt(x * x + y * y);
     }
 
+    static float distance(vec2 a, vec2 b) {
+        return (a - b).len();
+    }
+
     static float dot(vec2 a, vec2 b) {
         return a.x * b.x + a.y * b.y;
     }
@@ -185,3 +189,4 @@ GrayImage whiteNoise(int width, int height, int cellSize, int seed);
 GrayImage valueNoise(int width, int height, int cellSize, int seed);
 GrayImage perlinNoise(int width, int height, int cellSize, int seed);
 GrayImage simplexNoise(int width, int height, int cellSize, int seed);
+GrayImage worleyNoise(int width, int height, int cellSize, int seed);

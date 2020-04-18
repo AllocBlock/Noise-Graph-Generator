@@ -5,4 +5,5 @@
 - 白噪声 (White Noise)
 - 梯度噪声 (Gradient Noise)
   - 柏林噪声 (Perlin Noise)
-  - 值噪声 (Value Noise)
+  - 单形噪声 (Simplex Noise)
+- 值噪声 (Value Noise)
